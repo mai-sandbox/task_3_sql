@@ -265,8 +265,8 @@ def create_graph():
     # Add nodes
     workflow.add_node("chatbot", chatbot_node)
     
-    # Create tool node with all our tools
-    tools = [generate_sql_query, execute_sql_query, generate_natural_language_response]
+    # Create tool node with our single comprehensive tool
+    tools = [query_chinook_database]
     tool_node = ToolNode(tools)
     workflow.add_node("tools", tool_node)
     
@@ -307,6 +307,7 @@ if __name__ == "__main__":
         final_message = result["messages"][-1]
         if isinstance(final_message, AIMessage):
             print(f"Response: {final_message.content}")
+
 
 
 
