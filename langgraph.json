@@ -3,5 +3,10 @@
   "graphs": {
     "agent": "./agent.py:app"
   },
-  "env": ".env"
+  "env": ".env",
+  "python_version": "3.11",
+  "dockerfile_lines": [
+    "RUN pip install --no-cache-dir requests sqlite3"
+  ]
 }
+
