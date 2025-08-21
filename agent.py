@@ -244,54 +244,15 @@ def chatbot_node(state: State) -> Dict[str, Any]:
     Main chatbot node that orchestrates the SQL agent workflow.
     """
     messages = state["messages"]
-    last_message = messages[-1]
     
-    # Check if this is a user message
-    if isinstance(last_message, HumanMessage):
-        user_query = last_message.content
-        
-        # Check if the query is relevant to the database
-        relevance_prompt = f"""Determine if the following question can be answered using a music store database 
-(Chinook) that contains information about artists, albums, tracks, customers, invoices, employees, etc.
-
-Question: {user_query}
-
-Respond with only "RELEVANT" or "IRRELEVANT"."""
-        
-        llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
-        relevance_check = llm.invoke(relevance_prompt).content.strip()
-        
-        if "IRRELEVANT" in relevance_check.upper():
-            response = "I don't know the answer to that question. I can only help with queries about the music store database, including information about artists, albums, tracks, customers, invoices, and employees."
-            return {"messages": [AIMessage(content=response)]}
-        
-        # Use the LLM with tools to process the query
-        llm_with_tools = llm.bind_tools([generate_sql_query, execute_sql_query, generate_natural_language_response])
-        
-        # First, generate the SQL query
-        tool_call_prompt = f"""You need to answer a question about a music store database.
-Follow these steps:
-1. First, use the generate_sql_query tool to create a SQL query for this question: {user_query}
-2. Then use the execute_sql_query tool to run the query
-3. Finally, use the generate_natural_language_response tool to create a natural language answer
-
-Start by generating the SQL query."""
-        
-        response = llm_with_tools.invoke([HumanMessage(content=tool_call_prompt)])
-        return {"messages": [response]}
+    # Initialize the LLM with the query tool
+    llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
+    llm_with_tools = llm.bind_tools([query_chinook_database])
     
-    # Handle tool responses and continue the workflow
-    elif isinstance(last_message, ToolMessage):
-        # After tools have been called, check if we need to call more tools
-        llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
-        llm_with_tools = llm.bind_tools([generate_sql_query, execute_sql_query, generate_natural_language_response])
-        
-        # Analyze the conversation to determine next steps
-        response = llm_with_tools.invoke(messages)
-        return {"messages": [response]}
+    # Process the messages with the tool-enabled LLM
+    response = llm_with_tools.invoke(messages)
     
-    # For AI messages with no tool calls, just pass through
-    return {"messages": []}
+    return {"messages": [response]}
 
 
 # Build the graph
@@ -346,6 +307,7 @@ if __name__ == "__main__":
         final_message = result["messages"][-1]
         if isinstance(final_message, AIMessage):
             print(f"Response: {final_message.content}")
+
 
 
 
