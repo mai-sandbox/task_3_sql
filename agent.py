@@ -309,7 +309,17 @@ Start by generating the SQL query."""
         response = llm_with_tools.invoke([HumanMessage(content=tool_call_prompt)])
         return {"messages": [response]}
     
-    # For other message types, just pass through
+    # Handle tool responses and continue the workflow
+    elif isinstance(last_message, ToolMessage):
+        # After tools have been called, check if we need to call more tools
+        llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
+        llm_with_tools = llm.bind_tools([generate_sql_query, execute_sql_query, generate_natural_language_response])
+        
+        # Analyze the conversation to determine next steps
+        response = llm_with_tools.invoke(messages)
+        return {"messages": [response]}
+    
+    # For AI messages with no tool calls, just pass through
     return {"messages": []}
 
 
@@ -378,4 +388,5 @@ if __name__ == "__main__":
         final_message = result["messages"][-1]
         if isinstance(final_message, AIMessage):
             print(f"Response: {final_message.content}")
+
 
