@@ -139,20 +139,33 @@ db = ChinookDatabase()
 
 
 @tool
-def generate_sql_query(user_query: str) -> str:
+def query_chinook_database(user_query: str) -> str:
     """
-    Generate a SQL query based on the user's natural language question.
-    This tool analyzes the user's request and creates an appropriate SQL query
-    for the Chinook database.
+    Process a natural language query about the Chinook music store database.
+    This tool generates SQL, executes it, and returns a natural language response.
     
     Args:
-        user_query: The user's natural language question about the database
+        user_query: The user's natural language question about the music store database
     
     Returns:
-        A SQL query string
+        A natural language response answering the user's question
     """
-    # Create a prompt with schema information
-    prompt = f"""You are a SQL expert. Generate a SQL query for the Chinook database based on the user's question.
+    # Step 1: Check if the query is relevant to the database
+    relevance_prompt = f"""Determine if the following question can be answered using a music store database 
+(Chinook) that contains information about artists, albums, tracks, customers, invoices, employees, etc.
+
+Question: {user_query}
+
+Respond with only "RELEVANT" or "IRRELEVANT"."""
+    
+    llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
+    relevance_check = llm.invoke(relevance_prompt).content.strip()
+    
+    if "IRRELEVANT" in relevance_check.upper():
+        return "I don't know the answer to that question. I can only help with queries about the music store database, including information about artists, albums, tracks, customers, invoices, and employees."
+    
+    # Step 2: Generate SQL query
+    sql_prompt = f"""You are a SQL expert. Generate a SQL query for the Chinook database based on the user's question.
 
 Database Schema:
 {CHINOOK_SCHEMA}
@@ -168,87 +181,47 @@ Instructions:
 
 SQL Query:"""
     
-    # Use the LLM to generate SQL
-    llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
-    response = llm.invoke(prompt)
-    
-    sql_query = response.content.strip()
+    sql_response = llm.invoke(sql_prompt)
+    sql_query = sql_response.content.strip()
     
     # Clean up the query if it contains markdown
-    if "```sql" in sql_query:
+    if "```sql" in sql_query.lower():
         sql_query = sql_query.split("```sql")[1].split("```")[0].strip()
     elif "```" in sql_query:
         sql_query = sql_query.split("```")[1].split("```")[0].strip()
     
-    return sql_query
-
-
-@tool
-def execute_sql_query(sql_query: str) -> str:
-    """
-    Execute a SQL query against the Chinook database and return the results.
-    
-    Args:
-        sql_query: The SQL query to execute
-    
-    Returns:
-        A string representation of the query results or error message
-    """
     if sql_query == "INVALID_QUERY":
         return "I don't know the answer to that question based on the available database information."
     
+    # Step 3: Execute the SQL query
     try:
         results = db.execute_query(sql_query)
         
         if not results:
-            return "No results found for the query."
-        
-        if "error" in results[0]:
-            return f"Error executing query: {results[0]['error']}"
-        
-        # Format results as a readable string
-        if len(results) > 10:
-            displayed_results = results[:10]
-            result_str = f"Showing first 10 of {len(results)} results:\n\n"
+            sql_results = "No results found for the query."
+        elif "error" in results[0]:
+            return f"I encountered an error while processing your query. Please try rephrasing your question."
         else:
-            displayed_results = results
-            result_str = f"Found {len(results)} result(s):\n\n"
-        
-        # Convert results to readable format
-        for i, row in enumerate(displayed_results, 1):
-            result_str += f"Result {i}:\n"
-            for key, value in row.items():
-                result_str += f"  {key}: {value}\n"
-            result_str += "\n"
-        
-        return result_str
-        
+            # Format results for the LLM
+            if len(results) > 10:
+                displayed_results = results[:10]
+                sql_results = f"Found {len(results)} results (showing first 10):\n"
+            else:
+                displayed_results = results
+                sql_results = f"Found {len(results)} result(s):\n"
+            
+            # Convert to readable format
+            for row in displayed_results:
+                sql_results += str(row) + "\n"
+    
     except Exception as e:
-        return f"Error executing query: {str(e)}"
-
-
-@tool
-def generate_natural_language_response(user_query: str, sql_query: str, sql_results: str) -> str:
-    """
-    Generate a natural language response based on the SQL query results.
+        return "I encountered an error while processing your query. Please try rephrasing your question."
     
-    Args:
-        user_query: The original user question
-        sql_query: The SQL query that was executed
-        sql_results: The results from executing the SQL query
-    
-    Returns:
-        A natural language response answering the user's question
-    """
-    if "I don't know" in sql_results or "Error" in sql_results:
-        return sql_results
-    
-    prompt = f"""You are a helpful assistant. Based on the SQL query results below, 
+    # Step 4: Generate natural language response
+    response_prompt = f"""You are a helpful assistant. Based on the SQL query results below, 
 provide a clear, natural language answer to the user's question.
 
 User Question: {user_query}
-
-SQL Query Executed: {sql_query}
 
 Query Results:
 {sql_results}
@@ -262,10 +235,8 @@ Instructions:
 
 Natural Language Response:"""
     
-    llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0.3)
-    response = llm.invoke(prompt)
-    
-    return response.content.strip()
+    final_response = llm.invoke(response_prompt)
+    return final_response.content.strip()
 
 
 def chatbot_node(state: State) -> Dict[str, Any]:
@@ -375,6 +346,7 @@ if __name__ == "__main__":
         final_message = result["messages"][-1]
         if isinstance(final_message, AIMessage):
             print(f"Response: {final_message.content}")
+
 
 
 
