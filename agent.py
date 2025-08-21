@@ -7,7 +7,7 @@ the Chinook database, and returns natural language responses.
 import sqlite3
 import requests
 from typing import Annotated, TypedDict, List, Dict, Any
-from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, ToolMessage
+from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 from langchain_core.tools import tool
 from langchain_anthropic import ChatAnthropic
 from langgraph.graph import StateGraph, START, END
@@ -375,6 +375,7 @@ if __name__ == "__main__":
         final_message = result["messages"][-1]
         if isinstance(final_message, AIMessage):
             print(f"Response: {final_message.content}")
+
 
 
 
