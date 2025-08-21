@@ -1,0 +1,15 @@
+evals/
+
+venv/
+.env
+
+.DS_Store
+__pycache__/
+
+.claude
+
+
+
+
+
+
