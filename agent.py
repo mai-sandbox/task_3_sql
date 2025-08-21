@@ -323,21 +323,6 @@ Start by generating the SQL query."""
     return {"messages": []}
 
 
-def should_continue(state: State) -> str:
-    """
-    Determine whether to continue processing or end.
-    """
-    messages = state["messages"]
-    last_message = messages[-1]
-    
-    # If there are tool calls, continue to tools
-    if hasattr(last_message, 'tool_calls') and last_message.tool_calls:
-        return "tools"
-    
-    # Otherwise, end
-    return END
-
-
 # Build the graph
 def create_graph():
     """Create and compile the LangGraph workflow"""
@@ -355,9 +340,11 @@ def create_graph():
     
     # Add edges
     workflow.add_edge(START, "chatbot")
+    
+    # Use the built-in tools_condition for proper tool routing
     workflow.add_conditional_edges(
         "chatbot",
-        should_continue,
+        tools_condition,
         {
             "tools": "tools",
             END: END
@@ -388,5 +375,6 @@ if __name__ == "__main__":
         final_message = result["messages"][-1]
         if isinstance(final_message, AIMessage):
             print(f"Response: {final_message.content}")
+
 
 
