@@ -39,19 +39,21 @@ class ChinookSQLAgent:
     def __init__(self):
         self.engine = None
         self.schema_info = ""
-        self.llm = self._initialize_llm()
+        self.llm = None  # Initialize LLM lazily
         self._setup_database()
         self._extract_schema()
     
-    def _initialize_llm(self):
-        """Initialize the LLM based on available API keys"""
-        if os.getenv("OPENAI_API_KEY"):
-            return ChatOpenAI(model="gpt-4", temperature=0)
-        elif os.getenv("ANTHROPIC_API_KEY"):
-            return ChatAnthropic(model="claude-3-sonnet-20240229", temperature=0)
-        else:
-            # Default to OpenAI for now - will need API key at runtime
-            return ChatOpenAI(model="gpt-4", temperature=0)
+    def _get_llm(self):
+        """Get or initialize the LLM based on available API keys"""
+        if self.llm is None:
+            if os.getenv("OPENAI_API_KEY"):
+                self.llm = ChatOpenAI(model="gpt-4", temperature=0)
+            elif os.getenv("ANTHROPIC_API_KEY"):
+                self.llm = ChatAnthropic(model="claude-3-sonnet-20240229", temperature=0)
+            else:
+                # Default to OpenAI - will need API key at runtime
+                self.llm = ChatOpenAI(model="gpt-4", temperature=0)
+        return self.llm
     
     def _setup_database(self):
         """Fetch Chinook SQL and create in-memory SQLite database"""
@@ -351,3 +353,4 @@ def enhanced_invoke(state):
     return original_invoke(state)
 
 app.invoke = enhanced_invoke
+
