@@ -177,7 +177,12 @@ Examples:
     
     try:
         # Initialize LLM
-        llm = ChatOpenAI(model="gpt-4", temperature=0) if os.getenv("OPENAI_API_KEY") else ChatAnthropic(model="claude-3-sonnet-20240229", temperature=0)
+        if os.getenv("OPENAI_API_KEY"):
+            llm = ChatOpenAI(model="gpt-4", temperature=0)
+        elif os.getenv("ANTHROPIC_API_KEY"):
+            llm = ChatAnthropic(model="claude-3-sonnet-20240229", temperature=0)
+        else:
+            llm = ChatOpenAI(model="gpt-4", temperature=0)
         
         chain = sql_prompt | llm
         response = chain.invoke({
@@ -353,4 +358,5 @@ def enhanced_invoke(state):
     return original_invoke(state)
 
 app.invoke = enhanced_invoke
+
 
