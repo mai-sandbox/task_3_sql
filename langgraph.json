@@ -1,0 +1,15 @@
+{
+  "dependencies": [
+    "langchain-anthropic",
+    "langchain-core", 
+    "langgraph",
+    "requests"
+  ],
+  "graphs": {
+    "agent": "./agent.py:app"
+  },
+  "env": ".env",
+  "dockerfile_lines": [],
+  "python_version": "3.11"
+}
+
