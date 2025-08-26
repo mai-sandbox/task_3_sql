@@ -1,0 +1,13 @@
+{
+  "dependencies": [
+    "langchain-anthropic",
+    "langchain-core",
+    "langgraph",
+    "requests",
+    "sqlite3"
+  ],
+  "graphs": {
+    "agent": "./agent.py:app"
+  },
+  "env": ".env"
+}
