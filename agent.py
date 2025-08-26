@@ -139,7 +139,8 @@ def generate_sql(state: AgentState) -> AgentState:
 Convert the following natural language query to SQL. Follow these rules:
 1. Only generate SELECT queries - no INSERT, UPDATE, DELETE, or DDL statements
 2. Use proper SQL syntax for SQLite
-3. If the query cannot be answered with the available tables, respond with exactly: "IRRELEVANT_QUERY"
+3. If the query cannot be answered with the available tables, respond with exactly: 
+   "IRRELEVANT_QUERY"
 4. Return only the SQL query, no explanations or formatting
 5. Use appropriate JOINs when needed to get complete information
 6. Limit results to reasonable numbers (e.g., TOP 10 or LIMIT 10)
@@ -306,6 +307,7 @@ def create_workflow():
 
 # Export the compiled graph as 'app' following LangGraph pattern
 app = create_workflow()
+
 
 
 
