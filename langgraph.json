@@ -1,13 +1,15 @@
 {
   "dependencies": [
     "langchain-anthropic",
-    "langchain-core",
+    "langchain-core", 
     "langgraph",
-    "requests",
-    "sqlite3"
+    "requests"
   ],
   "graphs": {
     "agent": "./agent.py:app"
   },
-  "env": ".env"
+  "env": ".env",
+  "dockerfile_lines": [],
+  "python_version": "3.11"
 }
+
