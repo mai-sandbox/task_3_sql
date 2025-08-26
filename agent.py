@@ -275,7 +275,7 @@ Natural Language Response:"""
         state["messages"].append(AIMessage(content=response.content))
         return state
 
-    except Exception as e:
+    except Exception:
         response = "I don't know the answer to that question."
         state["messages"].append(AIMessage(content=response))
         return state
@@ -311,6 +311,7 @@ def create_workflow():
 
 # Export the compiled graph as 'app' following LangGraph pattern
 app = create_workflow()
+
 
 
 
