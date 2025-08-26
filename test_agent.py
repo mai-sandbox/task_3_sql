@@ -112,7 +112,8 @@ def test_agent_structure():
                 )
                 tables = cursor.fetchall()
                 print(
-                    f"✓ Database contains {len(tables)} tables (showing first 5): {[t[0] for t in tables]}"
+                    f"✓ Database contains {len(tables)} tables (showing first 5): "
+                    f"{[t[0] for t in tables]}"
                 )
 
                 # Test a simple query
@@ -218,3 +219,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
