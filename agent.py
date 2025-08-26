@@ -209,4 +209,5 @@ agent = create_react_agent(
 )
 
 # Export the compiled graph as 'app' for deployment
-app = agent.compile()
+app = agent
+
