@@ -31,7 +31,10 @@ def initialize_database(state: AgentState) -> AgentState:
     """
     try:
         # Fetch the Chinook database SQL script
-        url = "https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_Sqlite.sql"
+        url = (
+            "https://raw.githubusercontent.com/lerocha/chinook-database/"
+            "master/ChinookDatabase/DataSources/Chinook_Sqlite.sql"
+        )
         response = requests.get(url)
         response.raise_for_status()
 
@@ -303,4 +306,5 @@ def create_workflow():
 
 # Export the compiled graph as 'app' following LangGraph pattern
 app = create_workflow()
+
 
