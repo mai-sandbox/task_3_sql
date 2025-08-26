@@ -1,0 +1,14 @@
+{
+  "candidate": "claude-code-mcp-1",
+  "bucket": "smoke",
+  "points": 0,
+  "max_points": 10,
+  "details": [
+    {
+      "key": "compile",
+      "points": 0,
+      "passed": false,
+      "msg": "agent.py must compile/import: [Errno 2] No such file or directory: '/Users/aliyan/Documents/task_3_sql/expert_src/simple_text2sql.py'"
+    }
+  ]
+}

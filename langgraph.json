@@ -1,0 +1,8 @@
+{
+  "agent": "./agent.py:app",
+  "env": ".env",
+  "dependencies": [
+    "."
+  ],
+  "python_version": "3.11"
+}
