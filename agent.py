@@ -132,7 +132,7 @@ def generate_sql(state: AgentState) -> AgentState:
         llm = ChatAnthropic(model="claude-3-sonnet-20240229", temperature=0)
 
         # Create prompt with schema context
-        prompt = f"""You are a SQL expert working with a Chinook music database. 
+        prompt = f"""You are a SQL expert working with a Chinook music database.
 
 {state["schema_info"]}
 
@@ -306,5 +306,6 @@ def create_workflow():
 
 # Export the compiled graph as 'app' following LangGraph pattern
 app = create_workflow()
+
 
 
