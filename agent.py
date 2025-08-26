@@ -108,7 +108,10 @@ def extract_database_schema(conn: sqlite3.Connection) -> str:
         "- Find all albums by AC/DC: SELECT * FROM Album a JOIN Artist ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'AC/DC';"
     )
     schema_info.append(
-        "- Get top 5 customers by total purchases: SELECT c.FirstName, c.LastName, SUM(i.Total) as TotalSpent FROM Customer c JOIN Invoice i ON c.CustomerId = i.CustomerId GROUP BY c.CustomerId ORDER BY TotalSpent DESC LIMIT 5;"
+        "- Get top 5 customers by total purchases: "
+        "SELECT c.FirstName, c.LastName, SUM(i.Total) as TotalSpent "
+        "FROM Customer c JOIN Invoice i ON c.CustomerId = i.CustomerId "
+        "GROUP BY c.CustomerId ORDER BY TotalSpent DESC LIMIT 5;"
     )
     schema_info.append(
         "- Find tracks longer than 5 minutes: SELECT Name, Milliseconds/1000/60.0 as Minutes FROM Track WHERE Milliseconds > 300000;"
@@ -362,5 +365,6 @@ if __name__ == "__main__":
     print("4. Tool executes SQL against Chinook database")
     print("5. LLM provides natural language response")
     print("=" * 60)
+
 
 
