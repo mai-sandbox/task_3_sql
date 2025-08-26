@@ -138,6 +138,33 @@ def main():
         print("To test the complete workflow, set the API key:")
         print("export ANTHROPIC_API_KEY='your-api-key'")
         print("Then run: python3 test_agent.py")
+        
+        print("\n" + "="*60)
+        print("USAGE EXAMPLE")
+        print("="*60)
+        print("When the API key is set, you can use the agent like this:")
+        print()
+        print("from langchain_core.messages import HumanMessage")
+        print("from agent import app")
+        print()
+        print("# Create initial state with a natural language query")
+        print("initial_state = {")
+        print('    "messages": [HumanMessage("Who are the top 5 artists by album count?")]')
+        print("}")
+        print()
+        print("# Invoke the agent")
+        print("result = app.invoke(initial_state)")
+        print()
+        print("# Get the response")
+        print("response = result['messages'][-1].content")
+        print("print(response)")
+        print()
+        print("The agent will:")
+        print("1. Initialize the Chinook database")
+        print("2. Extract schema information")
+        print("3. Generate SQL from natural language")
+        print("4. Execute the SQL query")
+        print("5. Generate a natural language response")
         return
     
     print("Testing LangGraph Text-to-SQL Agent")
@@ -191,4 +218,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
