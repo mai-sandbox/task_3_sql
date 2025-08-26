@@ -140,8 +140,12 @@ class ChinookDatabase:
 # Initialize the database
 db = ChinookDatabase()
 
-# Initialize the LLM
-llm = ChatOpenAI(model="gpt-4", temperature=0)
+# Initialize the LLM (with fallback for testing)
+try:
+    llm = ChatOpenAI(model="gpt-4", temperature=0)
+except Exception:
+    # Fallback for testing without API key
+    llm = None
 
 
 def is_relevant_query(user_input: str) -> bool:
@@ -349,3 +353,4 @@ workflow.add_edge("generate_response", END)
 
 # Compile the graph
 app = workflow.compile()
+
