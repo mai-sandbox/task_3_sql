@@ -129,7 +129,8 @@ def execute_sql_query(sql_query: str) -> str:
     Returns:
         Query results formatted as a string, or error message
     """
-    if sql_query == "IRRELEVANT_QUERY":
+    # Check if the query appears to be irrelevant to the database
+    if not sql_query.strip() or sql_query.strip().startswith('--') or 'IRRELEVANT' in sql_query.upper():
         return "I don't know the answer to that question. I can only help with questions about the Chinook music database."
     
     if not db_connection:
@@ -266,6 +267,7 @@ if __name__ == "__main__":
     else:
         print("\nSkipping live test - no API keys found (this is expected in development)")
         print("To test with real queries, set ANTHROPIC_API_KEY or OPENAI_API_KEY environment variable")
+
 
 
 
