@@ -1,0 +1,12 @@
+{
+  "name": "text-to-sql-agent",
+  "description": "A text-to-SQL agent for querying the Chinook music database",
+  "entry_point": "./agent.py:app",
+  "env": {},
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "agent": "./agent.py:app"
+  }
+}
