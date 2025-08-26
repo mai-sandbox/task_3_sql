@@ -162,7 +162,8 @@ def main():
         print("# Create initial state with a natural language query")
         print("initial_state = {")
         print(
-            '    "messages": [HumanMessage("Who are the top 5 artists by album count?")]'
+            '    "messages": [HumanMessage("Who are the top 5 artists by '
+            'album count?")]'
         )
         print("}")
         print()
@@ -219,4 +220,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
