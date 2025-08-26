@@ -308,7 +308,7 @@ if __name__ == "__main__":
         tool = tools[0]
         print(f"   Tool name: {tool.name}")
         print(f"   Tool description: {tool.description[:50]}...")
-        print(f"   Tool integration: ✓ Success")
+        print("   Tool integration: ✓ Success")
     except Exception as e:
         print(f"   Tool integration: ✗ Failed - {str(e)}")
 
@@ -362,4 +362,5 @@ if __name__ == "__main__":
     print("4. Tool executes SQL against Chinook database")
     print("5. LLM provides natural language response")
     print("=" * 60)
+
 
