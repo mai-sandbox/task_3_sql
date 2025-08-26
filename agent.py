@@ -235,7 +235,7 @@ def get_model():
 model = get_model()
 
 # Create the agent
-tools = [generate_sql_query, execute_sql_query]
+tools = [execute_sql_query]
 
 app = create_react_agent(
     model=model,
@@ -267,6 +267,7 @@ if __name__ == "__main__":
     else:
         print("\nSkipping live test - no API keys found (this is expected in development)")
         print("To test with real queries, set ANTHROPIC_API_KEY or OPENAI_API_KEY environment variable")
+
 
 
 
