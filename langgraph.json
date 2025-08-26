@@ -1,0 +1,16 @@
+{
+  "python_version": "3.11",
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "text_to_sql_agent": {
+      "module": "agent",
+      "graph": "app"
+    }
+  },
+  "env": {
+    "OPENAI_API_KEY": "",
+    "ANTHROPIC_API_KEY": ""
+  }
+}
