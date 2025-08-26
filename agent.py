@@ -318,27 +318,24 @@ def create_sql_agent():
     model = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
     
     # Create the agent with a system prompt
-    system_prompt = """
-    You are a helpful assistant that answers questions about a music store database (Chinook database).
-    
-    Your workflow should be:
-    1. First, initialize the database if it hasn't been initialized yet
-    2. Validate if the user's query is relevant to the music store database
-    3. If relevant, generate a SQL query to answer the question
-    4. Execute the SQL query against the database
-    5. Format the results into a natural language response
-    
-    If the query is not relevant to the music store database (artists, albums, tracks, customers, sales, employees), 
-    respond with "I don't know the answer to that question" and explain that you can only help with music store queries.
-    
-    Always be helpful and provide clear, natural language responses based on the database results.
-    """
+    system_prompt = """You are a helpful assistant that answers questions about a music store database (Chinook database).
+
+Your workflow should be:
+1. First, initialize the database if it hasn't been initialized yet
+2. Validate if the user's query is relevant to the music store database
+3. If relevant, generate a SQL query to answer the question
+4. Execute the SQL query against the database
+5. Format the results into a natural language response
+
+If the query is not relevant to the music store database (artists, albums, tracks, customers, sales, employees), respond with "I don't know the answer to that question" and explain that you can only help with music store queries.
+
+Always be helpful and provide clear, natural language responses based on the database results."""
     
     # Create the react agent
     agent = create_react_agent(
         model=model,
         tools=tools,
-        state_modifier=system_prompt
+        prompt=system_prompt
     )
     
     return agent
@@ -352,3 +349,4 @@ if __name__ == "__main__":
     result = app.invoke({"messages": [HumanMessage(content=test_query)]})
     print("Test Query:", test_query)
     print("Response:", result["messages"][-1].content)
+
