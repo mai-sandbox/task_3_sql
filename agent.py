@@ -220,27 +220,44 @@ IMPORTANT INSTRUCTIONS:
 Remember: You can only help with questions about the Chinook music database. For anything else, just say you don't know.
 """
 
-# Initialize the model
-try:
-    model = ChatAnthropic(
-        model="claude-3-5-sonnet-20241022",
-        temperature=0
-    )
-except Exception:
-    # Fallback to OpenAI if Anthropic is not available
+# Initialize the model with proper API key handling
+def get_model():
+    """Get the best available model with proper fallback handling."""
+    # Try Anthropic first (preferred)
+    try:
+        if os.getenv("ANTHROPIC_API_KEY"):
+            return ChatAnthropic(
+                model="claude-3-5-sonnet-20241022",
+                temperature=0
+            )
+    except Exception:
+        pass
+    
+    # Try OpenAI as fallback
     try:
         from langchain_openai import ChatOpenAI
-        model = ChatOpenAI(
-            model="gpt-4o",
-            temperature=0
+        if os.getenv("OPENAI_API_KEY"):
+            return ChatOpenAI(
+                model="gpt-4o",
+                temperature=0
+            )
+    except Exception:
+        pass
+    
+    # Final fallback - create a mock model for development/testing
+    try:
+        from langchain_openai import ChatOpenAI
+        return ChatOpenAI(
+            model="gpt-3.5-turbo",
+            temperature=0,
+            api_key="dummy-key-for-development"  # This will fail but allows testing structure
         )
     except Exception:
-        # Final fallback
-        from langchain_openai import ChatOpenAI
-        model = ChatOpenAI(
-            model="gpt-3.5-turbo",
-            temperature=0
-        )
+        # If all else fails, create a minimal mock
+        from langchain_core.language_models.fake import FakeListChatModel
+        return FakeListChatModel(responses=["I need proper API keys to function."])
+
+model = get_model()
 
 # Create the agent
 tools = [generate_sql_query, execute_sql_query]
@@ -260,3 +277,4 @@ if __name__ == "__main__":
     print("Test result:")
     for message in result["messages"]:
         print(f"{message.__class__.__name__}: {message.content}")
+
