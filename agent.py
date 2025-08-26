@@ -173,9 +173,7 @@ def execute_sql_query(sql_query: str) -> str:
 
         # Get column names
         column_names = (
-            [description[0] for description in cursor.description]
-            if cursor.description
-            else []
+            [description[0] for description in cursor.description] if cursor.description else []
         )
 
         # Fetch results
@@ -355,16 +353,12 @@ if __name__ == "__main__":
     if os.getenv("ANTHROPIC_API_KEY") or os.getenv("OPENAI_API_KEY"):
         try:
             print("   Testing complete workflow...")
-            test_message = HumanMessage(
-                "What are the top 5 best-selling artists by total sales?"
-            )
+            test_message = HumanMessage("What are the top 5 best-selling artists by total sales?")
             result = app.invoke({"messages": [test_message]})
             print("   ✓ Workflow completed successfully!")
             print("\n   WORKFLOW RESULT:")
             for i, message in enumerate(result["messages"]):
-                print(
-                    f"   {i+1}. {message.__class__.__name__}: {message.content[:100]}..."
-                )
+                print(f"   {i+1}. {message.__class__.__name__}: {message.content[:100]}...")
         except Exception as e:
             print(f"   ✗ Workflow test failed: {str(e)[:100]}...")
     else:

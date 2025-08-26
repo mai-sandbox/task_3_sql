@@ -138,9 +138,7 @@ def test_with_api_keys():
                 print("✓ Workflow completed successfully!")
                 print("Messages in conversation:")
                 for i, message in enumerate(result["messages"]):
-                    print(
-                        f"  {i+1}. {message.__class__.__name__}: {message.content[:100]}..."
-                    )
+                    print(f"  {i+1}. {message.__class__.__name__}: {message.content[:100]}...")
 
             except Exception as e:
                 print(f"✗ Workflow failed: {str(e)}")
