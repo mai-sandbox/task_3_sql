@@ -1,0 +1,14 @@
+{
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "agent": {
+      "path": "./agent.py:app",
+      "description": "LangGraph Text-to-SQL Agent for Chinook Database - Converts natural language queries to SQL, executes them against the Chinook SQLite database, and returns natural language responses."
+    }
+  },
+  "env": {
+    "ANTHROPIC_API_KEY": null
+  }
+}
