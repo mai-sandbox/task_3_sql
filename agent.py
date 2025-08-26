@@ -251,7 +251,7 @@ def generate_response(state: AgentState) -> AgentState:
             results_text += f"... and {len(state['sql_results']) - 10} more results\n"
 
         # Create prompt for natural language response
-        prompt = f"""Based on the following SQL query results, provide a clear and 
+        prompt = f"""Based on the following SQL query results, provide a clear and
 natural language answer to the user's question.
 
 User's Question: {user_query}
@@ -311,6 +311,7 @@ def create_workflow():
 
 # Export the compiled graph as 'app' following LangGraph pattern
 app = create_workflow()
+
 
 
 
