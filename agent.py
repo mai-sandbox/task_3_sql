@@ -20,7 +20,10 @@ import os
 
 def fetch_chinook_database() -> str:
     """Fetch the Chinook database SQL from GitHub repository."""
-    url = "https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_Sqlite.sql"
+    url = (
+        "https://raw.githubusercontent.com/lerocha/chinook-database/"
+        "master/ChinookDatabase/DataSources/Chinook_Sqlite.sql"
+    )
     try:
         response = requests.get(url, timeout=30)
         response.raise_for_status()
@@ -401,3 +404,4 @@ if __name__ == "__main__":
     print("4. Tool executes SQL against Chinook database")
     print("5. LLM provides natural language response")
     print("=" * 60)
+
