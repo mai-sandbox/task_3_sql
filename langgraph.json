@@ -1,7 +1,9 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "agent": "./agent.py:app"
+    "text_to_sql_agent": "./agent.py:app"
   },
-  "env": ".env"
+  "env": ".env",
+  "python_version": "3.11"
 }
+
