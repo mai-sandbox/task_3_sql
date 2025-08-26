@@ -1,0 +1,14 @@
+{
+  "dependencies": [
+    "langchain==0.3.27",
+    "langchain-core==0.3.74",
+    "langchain-openai==0.3.29",
+    "langgraph==0.6.4",
+    "requests==2.32.4",
+    "sqlite3"
+  ],
+  "graphs": {
+    "agent": "./agent.py:app"
+  },
+  "env": ".env"
+}
