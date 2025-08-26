@@ -212,7 +212,10 @@ def generate_response(state: AgentState) -> AgentState:
     try:
         # Handle irrelevant queries
         if state.get("error") == "IRRELEVANT_QUERY":
-            response = "I don't know the answer to that question. I can only help with queries related to the music database."
+            response = (
+                "I don't know the answer to that question. I can only help with "
+                "queries related to the music database."
+            )
             state["messages"].append(AIMessage(content=response))
             return state
 
@@ -307,6 +310,7 @@ def create_workflow():
 
 # Export the compiled graph as 'app' following LangGraph pattern
 app = create_workflow()
+
 
 
 
