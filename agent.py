@@ -11,7 +11,6 @@ from typing import TypedDict, List, Optional, Any
 from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from langchain_anthropic import ChatAnthropic
 from langgraph.graph import StateGraph, END
-import os
 
 
 class AgentState(TypedDict):
@@ -304,3 +303,4 @@ def create_workflow():
 
 # Export the compiled graph as 'app' following LangGraph pattern
 app = create_workflow()
+
