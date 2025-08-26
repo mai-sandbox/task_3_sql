@@ -10,7 +10,7 @@ This module implements a text-to-SQL agent that can:
 
 import sqlite3
 import requests
-from typing import List, Dict, Any, Optional
+
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage
 from langchain_anthropic import ChatAnthropic
@@ -362,3 +362,4 @@ if __name__ == "__main__":
     print("4. Tool executes SQL against Chinook database")
     print("5. LLM provides natural language response")
     print("=" * 60)
+
