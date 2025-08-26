@@ -53,9 +53,7 @@ def extract_database_schema(conn: sqlite3.Connection) -> str:
     cursor = conn.cursor()
 
     # Get all table names
-    cursor.execute(
-        "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;"
-    )
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
     tables = cursor.fetchall()
 
     schema_info = []
@@ -76,9 +74,7 @@ def extract_database_schema(conn: sqlite3.Connection) -> str:
             col_id, name, data_type, not_null, default_val, pk = col
             pk_indicator = " (PRIMARY KEY)" if pk else ""
             not_null_indicator = " NOT NULL" if not_null else ""
-            default_indicator = (
-                f" DEFAULT {default_val}" if default_val else ""
-            )
+            default_indicator = f" DEFAULT {default_val}" if default_val else ""
             schema_info.append(
                 f"  - {name}: {data_type}{pk_indicator}{not_null_indicator}{default_indicator}"
             )
@@ -201,9 +197,7 @@ def execute_sql_query(sql_query: str) -> str:
 
         for row in results[:10]:  # Limit to first 10 rows
             formatted_results.append(
-                " | ".join(
-                    str(cell) if cell is not None else "NULL" for cell in row
-                )
+                " | ".join(str(cell) if cell is not None else "NULL" for cell in row)
             )
 
         if len(results) > 10:
@@ -254,9 +248,7 @@ def get_model():
     # Try Anthropic first (preferred)
     try:
         if os.getenv("ANTHROPIC_API_KEY"):
-            return ChatAnthropic(
-                model="claude-3-5-sonnet-20241022", temperature=0
-            )
+            return ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
     except Exception:
         pass
 
@@ -282,9 +274,7 @@ def get_model():
         # If all else fails, create a minimal mock
         from langchain_core.language_models.fake import FakeListChatModel
 
-        return FakeListChatModel(
-            responses=["I need proper API keys to function."]
-        )
+        return FakeListChatModel(responses=["I need proper API keys to function."])
 
 
 model = get_model()
@@ -292,9 +282,7 @@ model = get_model()
 # Create the agent
 tools = [execute_sql_query]
 
-app = create_react_agent(
-    model=model, tools=tools, prompt=SYSTEM_PROMPT, debug=False
-)
+app = create_react_agent(model=model, tools=tools, prompt=SYSTEM_PROMPT, debug=False)
 
 # Export the compiled graph as 'app' for LangGraph deployment
 if __name__ == "__main__":
@@ -304,9 +292,7 @@ if __name__ == "__main__":
 
     # Test 1: Agent Structure Validation
     print("\n1. AGENT STRUCTURE VALIDATION:")
-    print(
-        f"   Database connection: {'✓ Connected' if db_connection else '✗ Failed'}"
-    )
+    print(f"   Database connection: {'✓ Connected' if db_connection else '✗ Failed'}")
     print(
         f"   Schema extracted: {'✓ Yes' if 'CHINOOK DATABASE SCHEMA' in database_schema else '✗ No'}"
     )
@@ -323,9 +309,7 @@ if __name__ == "__main__":
         print(f"   Direct SQL test: ✓ Success - {result}")
 
         # Test schema information
-        schema_test = (
-            "SELECT name FROM sqlite_master WHERE type='table' LIMIT 5"
-        )
+        schema_test = "SELECT name FROM sqlite_master WHERE type='table' LIMIT 5"
         tables = execute_sql_query(schema_test)
         print(f"   Schema access: ✓ Success - Found tables: {tables}")
 
@@ -385,9 +369,7 @@ if __name__ == "__main__":
             print(f"   ✗ Workflow test failed: {str(e)[:100]}...")
     else:
         print("   ⚠ Skipping live test - no API keys found")
-        print(
-            "   To test complete workflow, set ANTHROPIC_API_KEY or OPENAI_API_KEY"
-        )
+        print("   To test complete workflow, set ANTHROPIC_API_KEY or OPENAI_API_KEY")
 
     # Test Summary
     print("\n" + "=" * 60)
@@ -404,5 +386,3 @@ if __name__ == "__main__":
     print("4. Tool executes SQL against Chinook database")
     print("5. LLM provides natural language response")
     print("=" * 60)
-
-

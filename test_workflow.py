@@ -44,9 +44,7 @@ def test_workflow_components():
 
     # Test 1: Schema availability
     schema_available = "CHINOOK DATABASE SCHEMA" in database_schema
-    print(
-        f"✓ Database schema: {'Available' if schema_available else 'Missing'}"
-    )
+    print(f"✓ Database schema: {'Available' if schema_available else 'Missing'}")
 
     # Test 2: Agent compilation
     agent_compiled = app is not None
@@ -184,9 +182,7 @@ def main():
         print("⚠ End-to-end: Requires API keys for complete testing")
 
     print("\nDEPLOYMENT STATUS: ✅ READY")
-    print(
-        "The corrected implementation is fully functional and ready for use."
-    )
+    print("The corrected implementation is fully functional and ready for use.")
 
 
 if __name__ == "__main__":
