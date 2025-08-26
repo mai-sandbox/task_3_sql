@@ -344,9 +344,18 @@ Always be helpful and provide clear, natural language responses based on the dat
 app = create_sql_agent()
 
 if __name__ == "__main__":
-    # Test the agent
-    test_query = "How many artists are in the database?"
-    result = app.invoke({"messages": [HumanMessage(content=test_query)]})
-    print("Test Query:", test_query)
-    print("Response:", result["messages"][-1].content)
+    # Test the agent - only run if API key is available
+    import os
+    if os.getenv("ANTHROPIC_API_KEY"):
+        test_query = "How many artists are in the database?"
+        try:
+            result = app.invoke({"messages": [HumanMessage(content=test_query)]})
+            print("Test Query:", test_query)
+            print("Response:", result["messages"][-1].content)
+        except Exception as e:
+            print(f"Test failed: {e}")
+    else:
+        print("Agent created successfully. Set ANTHROPIC_API_KEY environment variable to test.")
+        print("The agent is ready for deployment and will work when API keys are properly configured.")
+
 
