@@ -1,4 +1,73 @@
-Create a LangGraph-based text-to-SQL agent. It should generate sql, execute that sql against the chinook sqlite database, and then generate a response answer in natural language based on the result.
-To use chinook db, fetch it from `https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_Sqlite.sql` and create  in-memory SQLite database using langgraph
-It might be useful to pass in the detailed info of the table schema to the prompt so the agent can convert user's natural request to correct sql. Whenever, the query is irrelevant, or cannot be answered using
-the sql db search, just say you don't know the answer and don't talk about anything. Your purpose is to only convert text request to sql and generate response in natural language.
+# Text-to-SQL LangGraph Agent
+
+A LangGraph-based agent that converts natural language queries to SQL, executes them against the Chinook database, and returns natural language responses.
+
+## Features
+
+- **Natural Language to SQL**: Converts user questions into SQL queries
+- **Chinook Database**: Uses the Chinook sample database (music store data)
+- **In-Memory Database**: Automatically fetches and sets up the database in memory
+- **Natural Language Responses**: Returns query results in readable format
+- **Error Handling**: Gracefully handles invalid queries or questions outside the database scope
+
+## Setup
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Set your OpenAI API key:
+```bash
+export OPENAI_API_KEY='your-api-key-here'
+```
+
+## Usage
+
+### Direct invocation:
+```python
+from agent import app
+from langchain_core.messages import HumanMessage
+
+initial_state = {
+    "messages": [HumanMessage("How many customers are there?")]
+}
+result = app.invoke(initial_state)
+print(result["messages"][-1].content)
+```
+
+### Testing:
+```bash
+python test_agent.py
+```
+
+## Example Queries
+
+- "How many customers are there?"
+- "What are the top 5 best selling albums?"
+- "Which artist has the most albums?"
+- "List all genres in the database"
+- "What's the total revenue from all invoices?"
+- "Which employee has been with the company the longest?"
+- "Show me customers from Canada"
+
+## Architecture
+
+The agent uses a LangGraph state graph with three main nodes:
+
+1. **generate_sql**: Converts natural language to SQL using LLM
+2. **execute_sql**: Executes the SQL query against the in-memory database
+3. **generate_response**: Generates a natural language response from the results
+
+The Chinook database schema includes tables for:
+- Artists, Albums, Tracks
+- Customers, Employees
+- Invoices, InvoiceLines
+- Genres, MediaTypes, Playlists
+
+## Files
+
+- `agent.py` - Main agent implementation
+- `langgraph.json` - LangGraph configuration
+- `test_agent.py` - Test script with example queries
+- `requirements.txt` - Python dependencies
